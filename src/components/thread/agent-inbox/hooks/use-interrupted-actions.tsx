@@ -82,12 +82,22 @@ export default function useInterruptedActions({
 
   const resumeRun = (response: HumanResponse[]): boolean => {
     try {
+      // Get activity_id from environment variable
+      const activityId = process.env.NEXT_PUBLIC_ACTIVITY_ID;
+
       thread.submit(
         {},
         {
           command: {
             resume: response,
           },
+          ...(activityId && {
+            config: {
+              configurable: {
+                activity_id: activityId,
+              },
+            },
+          }),
         },
       );
       return true;
@@ -253,12 +263,22 @@ export default function useInterruptedActions({
     initialHumanInterruptEditValue.current = {};
 
     try {
+      // Get activity_id from environment variable
+      const activityId = process.env.NEXT_PUBLIC_ACTIVITY_ID;
+
       thread.submit(
         {},
         {
           command: {
             goto: END,
           },
+          ...(activityId && {
+            config: {
+              configurable: {
+                activity_id: activityId,
+              },
+            },
+          }),
         },
       );
 

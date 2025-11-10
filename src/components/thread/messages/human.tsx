@@ -52,6 +52,9 @@ export function HumanMessage({
   const handleSubmitEdit = () => {
     setIsEditing(false);
 
+    // Get activity_id from environment variable
+    const activityId = process.env.NEXT_PUBLIC_ACTIVITY_ID;
+
     const newMessage: Message = { type: "human", content: value };
     thread.submit(
       { messages: [newMessage] },
@@ -60,6 +63,13 @@ export function HumanMessage({
         streamMode: ["values"],
         streamSubgraphs: true,
         streamResumable: true,
+        ...(activityId && {
+          config: {
+            configurable: {
+              activity_id: activityId,
+            },
+          },
+        }),
         optimisticValues: (prev) => {
           const values = meta?.firstSeenState?.values;
           if (!values) return prev;

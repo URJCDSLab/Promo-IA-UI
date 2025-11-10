@@ -127,8 +127,8 @@ const StreamSession = ({
 };
 
 // Default values for the form
-const DEFAULT_API_URL = "http://localhost:2024";
-const DEFAULT_ASSISTANT_ID = "agent";
+const DEFAULT_API_URL = process.env.NEXT_PUBLIC_API_URL;
+const DEFAULT_ASSISTANT_ID = process.env.NEXT_PUBLIC_ASSISTANT_ID;
 
 export const StreamProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -170,12 +170,14 @@ export const StreamProvider: React.FC<{ children: ReactNode }> = ({
             <div className="flex flex-col items-start gap-2">
               <LangGraphLogoSVG className="h-7" />
               <h1 className="text-xl font-semibold tracking-tight">
-                Agent Chat
+                PromoAI Chat
               </h1>
             </div>
             <p className="text-muted-foreground">
-              Welcome to Agent Chat! Before you get started, you need to enter
-              the URL of the deployment and the assistant / graph ID.
+              Welcome to Comerzzia PromoAI Assistant, a chatbot that helps users 
+              querying the Comerzzia Vertica Database to obtain marketing insights, 
+              tag customers and generate promotions. All these interactions are done 
+              in natural language.
             </p>
           </div>
           <form

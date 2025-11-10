@@ -103,9 +103,6 @@ function OpenGitHubRepo() {
             />
           </a>
         </TooltipTrigger>
-        <TooltipContent side="left">
-          <p>Open GitHub repo</p>
-        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
@@ -214,12 +211,22 @@ export function Thread() {
     const context =
       Object.keys(artifactContext).length > 0 ? artifactContext : undefined;
 
+    // Get activity_id from environment variable
+    const activityId = process.env.NEXT_PUBLIC_ACTIVITY_ID;
+
     stream.submit(
       { messages: [...toolMessages, newHumanMessage], context },
       {
         streamMode: ["values"],
         streamSubgraphs: true,
         streamResumable: true,
+        ...(activityId && {
+          config: {
+            configurable: {
+              activity_id: activityId,
+            },
+          },
+        }),
         optimisticValues: (prev) => ({
           ...prev,
           context,
@@ -242,11 +249,22 @@ export function Thread() {
     // Do this so the loading state is correct
     prevMessageLength.current = prevMessageLength.current - 1;
     setFirstTokenReceived(false);
+
+    // Get activity_id from environment variable
+    const activityId = process.env.NEXT_PUBLIC_ACTIVITY_ID;
+
     stream.submit(undefined, {
       checkpoint: parentCheckpoint,
       streamMode: ["values"],
       streamSubgraphs: true,
       streamResumable: true,
+      ...(activityId && {
+        config: {
+          configurable: {
+            activity_id: activityId,
+          },
+        },
+      }),
     });
   };
 
@@ -326,7 +344,6 @@ export function Thread() {
                 )}
               </div>
               <div className="absolute top-2 right-4 flex items-center">
-                <OpenGitHubRepo />
               </div>
             </div>
           )}
@@ -365,14 +382,13 @@ export function Thread() {
                     height={32}
                   />
                   <span className="text-xl font-semibold tracking-tight">
-                    Agent Chat
+                    PromoAI Chat
                   </span>
                 </motion.button>
               </div>
 
               <div className="flex items-center gap-4">
                 <div className="flex items-center">
-                  <OpenGitHubRepo />
                 </div>
                 <TooltipIconButton
                   size="lg"
@@ -438,7 +454,7 @@ export function Thread() {
                     <div className="flex items-center gap-3">
                       <LangGraphLogoSVG className="h-8 flex-shrink-0" />
                       <h1 className="text-2xl font-semibold tracking-tight">
-                        Agent Chat
+                        PromoAI Chat
                       </h1>
                     </div>
                   )}
